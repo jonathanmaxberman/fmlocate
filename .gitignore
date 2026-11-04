@@ -1,0 +1,8 @@
+__pycache__/
+*.egg-info/
+build/
+dist/
+.venv/
+/fmlocate-*.png
+/estimate.html
+examples/cache/tiles/

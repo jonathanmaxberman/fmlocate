@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fmlocate"
+version = "0.2.0"
+description = "Estimate your location from the FM, TV and NOAA Weather Radio stations an SDR receives"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["numpy>=1.22", "scipy>=1.8", "matplotlib>=3.5"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: Communications :: Ham Radio",
+]
+
+[project.scripts]
+fmlocate = "fmlocate.__main__:main_cli"
+
+[tool.setuptools]
+packages = ["fmlocate"]

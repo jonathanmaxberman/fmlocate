@@ -1,0 +1,64 @@
+Estimate:        39.7638, -75.1871   (most likely grid cell)
+Posterior mean:  39.7451, -75.1982
+Uncertainty:     50% within ~9 km, 90% within ~17 km (area-equivalent radii)
+1-sigma ellipse: 11 x 8 km, long axis bearing 100 deg
+Search prior:    IP geolocation (IP guess, rounded, coarse guess), +-150 km
+Receiver offset: FM -70, NOAA -56, TV VHF-low -76, TV VHF-high -82, TV UHF -68 dB (S/N = field dBuV/m + offset)
+Receiver fit:    +4 dB per 10 MHz across FM; building loss up to 0 dB, least towards 0 deg
+
+channel level   S/N obs  pred   station (dominant licence at estimate)          dist
+  -- FM
+   89.7   0.2      -   -4.2   18x  WGLS-FM      0.75 kW  149 m  Glassboro, NJ         12 km
+   90.1   1.6      -   -6.6   18x  WRTI         7.70 kW  371 m  Philadelphia, PA      31 km
+   90.9   3.6    1.1   -5.5   12x  WHYY-FM     13.50 kW  280 m  Philadelphia, PA      31 km
+   92.5   3.1    0.2   -4.2   10x  WXTU        15.00 kW  279 m  Philadelphia, PA      31 km
+   93.3   3.2    0.3    3.5   14x  WMMR        16.50 kW  264 m  Philadelphia, PA      21 km
+   93.7  10.8   10.4   -1.5   12x  WSTW        47.10 kW  153 m  Wilmington, DE        30 km
+   94.1   5.8    4.4   -4.6    7x  WIP-FM       9.60 kW  338 m  Philadelphia, PA      31 km
+   95.7   0.9      -   -3.9   11x  WBEN-FM      8.90 kW  350 m  Philadelphia, PA      31 km
+   96.5   1.0      -   -3.7   10x  WCUS         9.60 kW  338 m  Philadelphia, PA      31 km
+   97.5  -0.2      -   -4.1   15x  WPEN        26.00 kW  208 m  Burlington, NJ        36 km
+   98.1   3.6    1.2   -3.0    8x  WOGL         9.60 kW  338 m  Philadelphia, PA      31 km
+   98.9   5.8    4.5   -1.2    9x  WUSL        27.00 kW  204 m  Philadelphia, PA      32 km
+   99.5   1.8      -    1.1   13x  WVCW        50.00 kW  152 m  Wilmington, DE        30 km
+  100.3   7.0    6.0   -1.7   13x  WRNB        12.50 kW  302 m  Media, PA             31 km
+  101.1   7.4    6.6   -0.9   12x  WBEB        14.00 kW  287 m  Philadelphia, PA      31 km
+  102.1   4.4    2.5    0.0   10x  WIOQ        27.00 kW  204 m  Philadelphia, PA      32 km
+  102.9   1.1      -   -1.1   12x  WMGK         8.90 kW  350 m  Philadelphia, PA      31 km
+  104.1   2.5   -1.1  -12.1   15x  W281CM       0.25 kW    0 m  Millville, NJ         12 km
+  104.5   8.7    8.0   -0.2   14x  WRFF        11.50 kW  308 m  Philadelphia, PA      31 km
+  105.3   4.5    2.7    0.8    9x  WDAS-FM     16.50 kW  266 m  Philadelphia, PA      31 km
+  106.1   1.9      -   -0.9   10x  WUMR        22.50 kW  226 m  Philadelphia, PA      36 km
+  106.9   7.2    6.2   13.2   15x  WKVP        38.00 kW  168 m  Camden, NJ            18 km
+  107.9   0.1      -   -3.7   26x  WPPZ-FM      0.78 kW  276 m  Pennsauken, NJ        21 km
+  -- TV VHF-low
+    ch2  -4.7   -4.9   -2.8    3x  WDPN-TV     45.00 kW  311 m  Wilmington, DE        31 km
+    ch4   5.9  -10.2   -4.2    4x  WACP        34.00 kW  258 m  Atlantic City, NJ     30 km
+    ch6   8.5    7.9   -2.5    3x  WPVI-TV     45.00 kW  342 m  Philadelphia, PA      32 km
+  -- TV VHF-high
+   ch10  -0.1  -13.5  -21.3    5x  WSJT-LD      3.00 kW  231 m  Atlantic City, NJ     30 km
+   ch13   5.2  -15.7  -10.9    5x  WHYY-TV     30.00 kW  294 m  Wilmington, DE        31 km
+  -- TV UHF
+   ch16   6.2    5.1   -5.6    3x  WDUM-LD      5.00 kW  250 m  Philadelphia, PA      31 km
+   ch17  21.8   21.8   16.9    3x  WUVP-DT    645.00 kW  324 m  Vineland, NJ          31 km
+   ch18  -0.7      -  -19.6    3x  WMBC-TV    250.00 kW  520 m  Newton, NJ           145 km
+   ch21   2.6  -11.5  -17.3    5x  WNEP-TV    760.00 kW  509 m  Scranton, PA         168 km
+   ch22   4.2   -3.1    0.8    6x  WPHY-CD     15.00 kW  332 m  Trenton, NJ           31 km
+   ch23  23.2   23.2   13.2    9x  WNJS       281.00 kW  264 m  Camden, NJ            30 km
+   ch24   4.5   -6.2   -1.0   12x  WPHA-CD     15.00 kW  223 m  Philadelphia, PA      31 km
+   ch25  -1.7      -   -9.7    6x  W25FG-D      2.50 kW  161 m  Millersburg, PA       31 km
+   ch26  -0.8   -3.1   -1.9   10x  WQAV-CD     15.00 kW  195 m  Allentown, PA         31 km
+   ch27   0.5   -5.5   -5.7   12x  WPSJ-CD      8.50 kW  149 m  Hammonton, NJ         31 km
+   ch28  22.1   22.1   18.8   10x  WWSI       745.00 kW  400 m  Mount Laurel, NJ      31 km
+   ch29   1.9   -3.1   -1.4   14x  WELL-LD     15.00 kW  224 m  Philadelphia, PA      31 km
+   ch30  21.3   21.2   19.5    7x  KYW-TV     1000.00 kW  371 m  Philadelphia, PA      31 km
+   ch31  17.1   17.0   19.1    8x  WTXF-TV    1000.00 kW  336 m  Philadelphia, PA      31 km
+   ch32   2.0   -3.1   -1.1    8x  WZPA-LD     15.00 kW  200 m  Philadelphia, PA      30 km
+   ch33  21.1   21.1   19.8    7x  WPSG       1000.00 kW  387 m  Philadelphia, PA      31 km
+   ch34  14.9   14.8   13.6    7x  WPPX-TV    310.00 kW  324 m  Wilmington, DE        32 km
+   ch35   1.3   -3.1    1.3    5x  WFPA-CD     15.00 kW  356 m  Philadelphia, PA      31 km
+   ch36  -1.7   -5.6   -7.4   10x  WEFG-LD     15.00 kW   78 m  Philadelphia, PA      34 km
+  -- NOAA
+162.475   6.6    5.5    4.1    8x  KIH28        1.00 kW  150 m  Philadelphia, PA      21 km
+  ('-' = not received; 'Nx' = N candidate licences on that channel, unidentified;
+   TV level is channel power over the band floor, S/N is from the pilot or the power)
