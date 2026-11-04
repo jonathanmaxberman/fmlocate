@@ -37,7 +37,7 @@ def main(argv=None) -> int:
     ap.add_argument("--sigma-model", type=float, default=8, help="propagation + building error, dB [8]")
     ap.add_argument("--simple", action="store_true", help="only fit a common receiver offset "
                     "(no frequency slope or directional building loss)")
-    ap.add_argument("--gain", type=float, help="tuner gain, dB [rtl: 40.2; soapy: 75%% of the device's range]")
+    ap.add_argument("--gain", type=float, help="tuner gain, dB [rtl: 40.2; soapy: 80%% of the device's range]")
     ap.add_argument("--signals", default="fm,tv,wx", help="which signals to use: any of fm, tv, wx "
                     "(NOAA Weather Radio). FM is always swept, for RDS and the search centre [fm,tv,wx]")
     ap.add_argument("--offline", action="store_true", help="use only cached FCC/NOAA data (and no basemap)")

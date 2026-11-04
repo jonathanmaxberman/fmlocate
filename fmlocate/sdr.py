@@ -165,14 +165,17 @@ class SoapyBackend:
         except Exception:  # noqa: BLE001
             pass
         rng = self.dev.getGainRange(rx, 0)
-        self.gain = gain if gain is not None else round(rng.minimum() + 0.75 * (rng.maximum() - rng.minimum()), 1)
+        self.gain = gain if gain is not None else round(rng.minimum() + 0.8 * (rng.maximum() - rng.minimum()), 1)
         self.dev.setGain(rx, 0, self.gain)
         if ppm:
             try:
                 self.dev.setFrequencyCorrection(rx, 0, ppm)
             except Exception:  # noqa: BLE001
                 pass
-        self.stream = self.dev.setupStream(rx, SoapySDR.SOAPY_SDR_CF32)
+        # SoapyRTLSDR's default USB transfers hold ~55 ms each; small ones make retuning quick.
+        sargs = {"bufflen": "16384"} if self.info.get("driver") == "rtlsdr" else {}
+        self.stream = self.dev.setupStream(rx, SoapySDR.SOAPY_SDR_CF32, [0], sargs)
+        self.mtu = int(self.dev.getStreamMTU(self.stream))
         self.dev.activateStream(self.stream)
         self.buf = np.empty(1 << 16, np.complex64)
 
@@ -198,7 +201,7 @@ class SoapyBackend:
     def _read(self, n: int) -> np.ndarray:
         out = np.empty(n, np.complex64)
         got, tries = 0, 0
-        while got < n and tries < 200:
+        while got < n and tries < 20:  # 20 timeouts in a row (~10 s): the device has stopped
             sr = self.dev.readStream(self.stream, [self.buf], min(len(self.buf), n - got), timeoutUs=500_000)
             if sr.ret > 0:
                 out[got:got + sr.ret] = self.buf[:sr.ret]
@@ -207,12 +210,17 @@ class SoapyBackend:
                 tries += 1  # overflow or timeout: keep reading
         return out[:got]
 
-    def _tune(self, f: float) -> None:
+    def _tune(self, f: float, first: bool = False) -> None:
         self.dev.setFrequency(self.S.SOAPY_SDR_RX, 0, f)
-        self._read(int(self.rate * 0.03))  # discard samples from before/while retuning
+        # Transfers already in flight still hold the old frequency: drop three of them,
+        # plus 20 ms for the PLL and filters to settle. After idling (DSP between
+        # operations), the driver's whole buffer has filled up with old samples (16 transfers
+        # in SoapyRTLSDR's default), so drop all of it.
+        self._read((20 if first else 3) * self.mtu + int(self.rate * 0.02))
 
     def sweep(self, f_lo, f_hi, bin_hz, seconds, crop=0.3):
-        nfft = 1 << int(np.ceil(np.log2(self.rate / bin_hz)))
+        # Same bin choice as rtl_power: the power of two giving bins of about half bin_hz.
+        nfft = 1 << int(np.ceil(np.log2(2 * self.rate / bin_hz)))
         df = self.rate / nfft
         keep = int(nfft * (1 - crop)) // 2 * 2
         lo_k = (nfft - keep) // 2
@@ -221,8 +229,8 @@ class SoapyBackend:
         per_hop = max(seconds / len(centres), 16 * nfft / self.rate)
         win = signal.windows.hann(nfft, sym=False).astype(np.float32)
         fs, ps = [], []
-        for c in centres:
-            self._tune(c)
+        for i, c in enumerate(centres):
+            self._tune(c, first=i == 0)
             x = self._read(int(per_hop * self.rate) // nfft * nfft)
             if len(x) < nfft:
                 continue
@@ -242,7 +250,7 @@ class SoapyBackend:
 
     def capture_mpx(self, freq_hz, seconds):
         offset = 250e3  # tune off the station so the DC spike isn't on the carrier
-        self._tune(freq_hz + offset)
+        self._tune(freq_hz + offset, first=True)
         iq = self._read(int(self.rate * seconds))
         t = np.arange(len(iq)) / self.rate
         return fm_demod_mpx(iq * np.exp(2j * np.pi * offset * t).astype(np.complex64), self.rate)

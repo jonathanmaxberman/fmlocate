@@ -24,14 +24,36 @@ pipx install git+https://github.com/jonathanmaxberman/fmlocate
 # or: pip install git+https://github.com/jonathanmaxberman/fmlocate
 ```
 
-**Tested:** the rtl backend, on an RTL-SDR (Nooelec NESDR SMArt v5) under macOS. The
-SoapySDR backend finds and opens devices, but its sweep and FM capture haven't yet been checked
-on real hardware: conda-forge's SoapyRTLSDR build delivered no samples on the test Mac. Reports
-from other radios are welcome.
-
 SoapySDR's Python module isn't on PyPI. It comes with the system or Homebrew Python, so
 for the Soapy backend install fmlocate into that Python, or into a venv made with
 `--system-site-packages`.
+
+**What's been tested.** Both backends were run on the same RTL-SDR (Nooelec NESDR SMArt v5)
+under macOS 26.1, minutes apart:
+
+| | rtl backend | Soapy backend (Homebrew SoapySDR 0.9 + SoapyRTLSDR 0.3.4) |
+|---|---|---|
+| FM channels received / RDS | 15 / WVCW decoded | 13 / none decoded in the full run (WVCW decoded in a separate test) |
+| TV channels with a reading | 20 | 20; levels agree within about 2 dB, pilots within about 3 dB |
+| Error of the full estimate | 10.9 km, inside the 90% region | 26.4 km, just outside it |
+
+The two backends measure the same thing. The difference in the estimates is the run-to-run
+spread of the method in one indoor spot: TV-only replays of the two runs put the posterior
+mean 11.2 and 11.7 km away, but put the single most likely cell 4.5 and 39.7 km away. Other
+Soapy radios (HackRF, Airspy, ...) haven't been tried. Notes:
+
+- The Soapy backend sweeps in Python. A 140 MHz UHF sweep takes about 10 s, against about 7 s
+  for `rtl_power`.
+- After each retune it discards the driver's in-flight transfers. SoapyRTLSDR's default
+  transfers are ~55 ms each, and without this the next frequency's spectrum contains the last
+  one's signals. For RTL-SDRs it asks for small transfers (`bufflen=16384`).
+- conda-forge's SoapyRTLSDR/librtlsdr build delivered no samples on the test Mac and left the
+  dongle wedged until it was replugged. Homebrew's build works.
+- On macOS 26.1, Homebrew's Python 3.15 (which `brew install soapysdr` builds the bindings
+  for) returns an empty `platform.mac_ver()`, and pip 26.2 fails with
+  `invalid literal for int()`. One workaround is to install fmlocate's dependencies into a
+  Python 3.15 venv using another Python's pip:
+  `pip install --target VENV/lib/python3.15/site-packages --python-version 3.15 --only-binary=:all: numpy scipy matplotlib`.
 
 ## Use
 
@@ -66,7 +88,7 @@ Main options:
 | Option | What it does |
 |---|---|
 | `--sdr auto\|rtl[:INDEX]\|soapy[:ARGS]` | Receiver backend (default: rtl-sdr tools if they find a dongle, else the first SoapySDR device) |
-| `--gain DB`, `--ppm N` | Tuner gain (rtl default 40.2 dB; Soapy default 75% of the device's range) and frequency correction |
+| `--gain DB`, `--ppm N` | Tuner gain (rtl default 40.2 dB; Soapy default 80% of the device's range) and frequency correction |
 | `--signals fm,tv,wx` | Which signals to measure and use (`wx` = NOAA Weather Radio). FM is always swept, because RDS sets the search centre |
 | `--png FILE`, `--no-png`, `--no-basemap` | Heatmap image. By default it's written with an OpenStreetMap background, which falls back to a plain lat/lon grid when offline |
 | `--map FILE.html` | Also write an interactive Leaflet map |
